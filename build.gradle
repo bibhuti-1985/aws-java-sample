@@ -7,6 +7,12 @@ repositories {
     mavenCentral()
 }
 
+dependencyManagement {
+    imports {
+        mavenBom 'software.amazon.awssdk:bom:2.29.0'
+    }
+}
+
 dependencies {
-    compile 'com.amazonaws:aws-java-sdk:1.9.6'
+    implementation 'software.amazon.awssdk:s3'
 }
