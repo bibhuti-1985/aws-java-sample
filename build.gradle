@@ -1,5 +1,15 @@
 apply plugin: 'java'
 apply plugin: 'application'
+apply plugin: 'io.spring.dependency-management'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.spring.gradle:dependency-management-plugin:1.1.4'
+    }
+}
 
 // Intentionally pinned to Java 8 so AWS Transform's managed Java
 // language upgrade (Java 8/11 -> Java 17/21) is detected as an
@@ -13,8 +23,17 @@ repositories {
     mavenCentral()
 }
 
+dependencyManagement {
+    imports {
+        mavenBom 'software.amazon.awssdk:bom:2.29.0'
+    }
+}
+
 dependencies {
-    compile 'com.amazonaws:aws-java-sdk:1.9.6'
+    compile 'software.amazon.awssdk:s3'
+    compile 'software.amazon.awssdk:dynamodb'
+    compile 'software.amazon.awssdk:sqs'
+    compile 'software.amazon.awssdk:sns'
     // Intentionally old dependencies to illustrate the tech debt that
     // AWS Transform's continuous modernization flow addresses.
     compile 'joda-time:joda-time:2.3'
