@@ -14,12 +14,11 @@ import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.core.sync.RequestBody;
 
 /**
  * Renders a plain-text invoice for an order and uploads it to S3.
@@ -36,13 +35,15 @@ public class InvoiceStorageService {
 
     private static final Logger LOG = Logger.getLogger(InvoiceStorageService.class.getName());
 
-    private final AmazonS3 s3Client;
+    private final S3Client s3Client;
     private final String bucketName;
 
     public InvoiceStorageService(String bucketName) {
         this.bucketName = bucketName;
-        this.s3Client = new AmazonS3Client(new DefaultAWSCredentialsProviderChain());
-        this.s3Client.setRegion(Region.getRegion(Regions.US_WEST_2));
+        this.s3Client = S3Client.builder()
+                .region(Region.US_WEST_2)
+                .credentialsProvider(DefaultCredentialsProvider.create())
+                .build();
     }
 
     /**
@@ -56,8 +57,11 @@ public class InvoiceStorageService {
         File invoiceFile = renderInvoice(order);
         String key = "invoices/" + order.getCustomerId() + "/" + order.getOrderId() + ".txt";
 
-        PutObjectRequest request = new PutObjectRequest(bucketName, key, invoiceFile);
-        s3Client.putObject(request);
+        PutObjectRequest request = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+        s3Client.putObject(request, RequestBody.fromFile(invoiceFile));
 
         LOG.info("Uploaded invoice for order " + order.getOrderId()
                 + " to s3://" + bucketName + "/" + key);

@@ -7,29 +7,30 @@ package com.amazonaws.samples;
 
 import java.util.logging.Logger;
 
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.sns.AmazonSNSClient;
-import com.amazonaws.services.sns.model.PublishRequest;
-import com.amazonaws.services.sns.model.PublishResult;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.sns.SnsClient;
+import software.amazon.awssdk.services.sns.model.PublishRequest;
+import software.amazon.awssdk.services.sns.model.PublishResponse;
 
 /**
  * Fans customer-facing order notifications out through SNS.
  *
- * <p>Uses the AWS SDK v1 client-constructor + {@code setRegion} pattern.
+ * <p>Uses the AWS SDK v2 client builder pattern.
  */
 public class OrderNotificationService {
 
     private static final Logger LOG = Logger.getLogger(OrderNotificationService.class.getName());
 
-    private final AmazonSNSClient snsClient;
+    private final SnsClient snsClient;
     private final String topicArn;
 
     public OrderNotificationService(String topicArn) {
         this.topicArn = topicArn;
-        this.snsClient = new AmazonSNSClient(new DefaultAWSCredentialsProviderChain());
-        this.snsClient.setRegion(Region.getRegion(Regions.US_WEST_2));
+        this.snsClient = SnsClient.builder()
+                .region(Region.US_WEST_2)
+                .credentialsProvider(DefaultCredentialsProvider.create())
+                .build();
     }
 
     /**
@@ -45,14 +46,15 @@ public class OrderNotificationService {
                 + ".\nTotal: " + order.getTotal().toPlainString() + " " + order.getCurrency()
                 + "\n\nThanks for shopping with us.";
 
-        PublishRequest request = new PublishRequest()
-                .withTopicArn(topicArn)
-                .withSubject(subject)
-                .withMessage(message);
+        PublishRequest request = PublishRequest.builder()
+                .topicArn(topicArn)
+                .subject(subject)
+                .message(message)
+                .build();
 
-        PublishResult result = snsClient.publish(request);
+        PublishResponse result = snsClient.publish(request);
         LOG.info("Notified customer for order " + order.getOrderId()
-                + " messageId=" + result.getMessageId());
-        return result.getMessageId();
+                + " messageId=" + result.messageId());
+        return result.messageId();
     }
 }
