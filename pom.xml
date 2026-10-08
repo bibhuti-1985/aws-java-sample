@@ -10,18 +10,34 @@
     <name>aws-java-sample</name>
     <url>http://aws.amazon.com/sdkforjava</url>
 
+    <!--
+        Pinned to Spring Boot 2.7.x (OSS-EOL since Nov 2023) so AWS Transform's
+        managed Spring Boot upgrade transformation (2.x -> 3.x) is detected as
+        an applicable transformation.
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.18</version>
+        <relativePath/>
+    </parent>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--
-            Intentionally pinned to Java 8 so AWS Transform's managed
-            Java language upgrade (QCT: Java 8/11 -> Java 17/21) is
+            java.version drives maven.compiler.source/target through the
+            Spring Boot parent. Pinned to 1.8 so AWS Transform's managed
+            Java language upgrade (QCT: Java 8/11 -> Java 17/21) is also
             detected as an applicable transformation.
         -->
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
@@ -52,6 +68,10 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
