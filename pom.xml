@@ -20,6 +20,22 @@
             <artifactId>aws-java-sdk</artifactId>
             <version>1.9.6</version>
         </dependency>
+        <!--
+            Dependencies below are intentionally old to illustrate the kind of
+            tech debt AWS Transform's continuous modernization flow addresses:
+            Joda-Time is superseded by java.time since JDK 8, and
+            commons-lang 2.x is superseded by commons-lang3.
+        -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
     </dependencies>
 
     <build>

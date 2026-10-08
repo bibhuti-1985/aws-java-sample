@@ -9,4 +9,8 @@ repositories {
 
 dependencies {
     compile 'com.amazonaws:aws-java-sdk:1.9.6'
+    // Intentionally old dependencies to illustrate the tech debt that
+    // AWS Transform's continuous modernization flow addresses.
+    compile 'joda-time:joda-time:2.3'
+    compile 'commons-lang:commons-lang:2.6'
 }
