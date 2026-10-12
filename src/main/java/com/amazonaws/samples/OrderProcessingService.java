@@ -12,7 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
@@ -33,10 +33,10 @@ import org.joda.time.Duration;
  *       {@code for} loops, and manual string concatenation. A modernized
  *       version would use {@code java.time}, lambdas, streams, and
  *       {@code String.join}.</li>
- *   <li><b>EOL / outdated dependencies</b> &mdash; the build pins
- *       {@code aws-java-sdk 1.9.6}, {@code joda-time 2.3}, and
- *       {@code commons-lang 2.6}, all of which a dependency scanner
- *       would flag.</li>
+ *   <li><b>EOL / outdated dependencies</b> &mdash; the build now pins
+ *       {@code aws-java-sdk 1.12.788}, {@code joda-time 2.13.0}, and
+ *       {@code commons-lang3 3.18.0}, replacing the previously flagged
+ *       EOL versions.</li>
  * </ol>
  */
 public class OrderProcessingService {

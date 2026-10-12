@@ -8,7 +8,7 @@ package com.amazonaws.samples;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Region;
@@ -32,7 +32,7 @@ public class OrderQueuePublisher {
 
     public OrderQueuePublisher(String queueUrl) {
         if (StringUtils.isBlank(queueUrl)) {
-            // commons-lang 2.x; superseded by commons-lang3 (org.apache.commons.lang3)
+            // commons-lang3 (org.apache.commons.lang3)
             throw new IllegalArgumentException("queueUrl must not be blank");
         }
         this.queueUrl = queueUrl;
