@@ -1,9 +1,8 @@
 plugins {
-    // Pinned to Spring Boot 2.7.x (OSS-EOL since Nov 2023) so AWS Transform's
-    // managed Spring Boot upgrade (2.x -> 3.x) is detected as an applicable
-    // transformation.
-    id 'org.springframework.boot' version '2.7.18'
-    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    // Spring Boot 3.2.12 (LTS), upgraded from the EOL 2.7.18 baseline as part
+    // of the Java 21 modernization; Spring Boot 3.x requires Java 17+.
+    id 'org.springframework.boot' version '3.2.12'
+    id 'io.spring.dependency-management' version '1.1.6'
     id 'java'
     id 'application'
 }

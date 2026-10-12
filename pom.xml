@@ -11,14 +11,13 @@
     <url>http://aws.amazon.com/sdkforjava</url>
 
     <!--
-        Pinned to Spring Boot 2.7.x (OSS-EOL since Nov 2023) so AWS Transform's
-        managed Spring Boot upgrade transformation (2.x -> 3.x) is detected as
-        an applicable transformation.
+        Spring Boot 3.2.12 (LTS). Upgraded from the EOL 2.7.18 baseline as
+        part of the Java 21 modernization; Spring Boot 3.x requires Java 17+.
     -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.18</version>
+        <version>3.2.12</version>
         <relativePath/>
     </parent>
 
