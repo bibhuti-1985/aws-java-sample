@@ -14,10 +14,12 @@ springBoot {
     mainClass = "com.amazonaws.samples.OrderServiceApplication"
 }
 
-// Pinned to Java 8 so AWS Transform's managed Java language upgrade
-// (Java 8/11 -> Java 17/21) is detected as an applicable transformation.
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+// Upgraded to the latest widely supported LTS release (Java 21).
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
 
 repositories {
     mavenCentral()
