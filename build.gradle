@@ -7,7 +7,9 @@ plugins {
     id 'application'
 }
 
-mainClassName = "com.amazonaws.samples.S3Sample"
+application {
+    mainClass = "com.amazonaws.samples.S3Sample"
+}
 
 springBoot {
     mainClass = "com.amazonaws.samples.OrderServiceApplication"
