@@ -46,6 +46,12 @@
             tech debt AWS Transform's continuous modernization flow addresses:
             Joda-Time is superseded by java.time since JDK 8, and
             commons-lang 2.x is superseded by commons-lang3.
+
+            Java 21 upgrade note: these two versions were deliberately NOT
+            updated. Both run correctly on Java 21, and replacing them would
+            mean API migrations (Joda-Time -> java.time, commons-lang ->
+            commons-lang3) that change behaviour beyond the scope of a runtime
+            version upgrade.
         -->
         <dependency>
             <groupId>joda-time</groupId>

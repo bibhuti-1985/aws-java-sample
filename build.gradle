@@ -32,6 +32,9 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk:1.12.788'
     // Intentionally old dependencies to illustrate the tech debt that
     // AWS Transform's continuous modernization flow addresses.
+    // Java 21 upgrade note: deliberately not updated — both are Java 21
+    // compatible, and replacing them requires API migrations (java.time,
+    // commons-lang3) outside the scope of a runtime version upgrade.
     implementation 'joda-time:joda-time:2.3'
     implementation 'commons-lang:commons-lang:2.6'
 }
