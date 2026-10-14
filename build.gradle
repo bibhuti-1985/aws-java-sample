@@ -1,23 +1,27 @@
 plugins {
-    // Pinned to Spring Boot 2.7.x (OSS-EOL since Nov 2023) so AWS Transform's
-    // managed Spring Boot upgrade (2.x -> 3.x) is detected as an applicable
-    // transformation.
-    id 'org.springframework.boot' version '2.7.18'
-    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    // Spring Boot 3.2.12 (LTS) - upgraded from the EOL 2.7.x line as part of
+    // the Java version upgrade, since Spring Boot 3.x is required to run on
+    // Java 17+/21.
+    id 'org.springframework.boot' version '3.2.12'
+    id 'io.spring.dependency-management' version '1.1.6'
     id 'java'
     id 'application'
 }
 
-mainClassName = "com.amazonaws.samples.S3Sample"
+application {
+    mainClass = "com.amazonaws.samples.S3Sample"
+}
 
 springBoot {
     mainClass = "com.amazonaws.samples.OrderServiceApplication"
 }
 
-// Pinned to Java 8 so AWS Transform's managed Java language upgrade
-// (Java 8/11 -> Java 17/21) is detected as an applicable transformation.
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+// Java 21, the current Java LTS release.
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
 
 repositories {
     mavenCentral()
@@ -25,7 +29,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.amazonaws:aws-java-sdk:1.9.6'
+    implementation 'com.amazonaws:aws-java-sdk:1.12.788'
     // Intentionally old dependencies to illustrate the tech debt that
     // AWS Transform's continuous modernization flow addresses.
     implementation 'joda-time:joda-time:2.3'
