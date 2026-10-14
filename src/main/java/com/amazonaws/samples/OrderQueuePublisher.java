@@ -10,24 +10,23 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.sqs.AmazonSQSClient;
-import com.amazonaws.services.sqs.model.SendMessageRequest;
-import com.amazonaws.services.sqs.model.SendMessageResult;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
+import software.amazon.awssdk.services.sqs.model.SendMessageResponse;
 
 /**
  * Publishes order lifecycle events to a downstream SQS queue so that
  * fulfillment, billing, and analytics can consume them asynchronously.
  *
- * <p>Written against the AWS SDK for Java v1.
+ * <p>Written against the AWS SDK for Java v2.
  */
 public class OrderQueuePublisher {
 
     private static final Logger LOG = Logger.getLogger(OrderQueuePublisher.class.getName());
 
-    private final AmazonSQSClient sqsClient;
+    private final SqsClient sqsClient;
     private final String queueUrl;
 
     public OrderQueuePublisher(String queueUrl) {
@@ -36,8 +35,10 @@ public class OrderQueuePublisher {
             throw new IllegalArgumentException("queueUrl must not be blank");
         }
         this.queueUrl = queueUrl;
-        this.sqsClient = new AmazonSQSClient(new DefaultAWSCredentialsProviderChain());
-        this.sqsClient.setRegion(Region.getRegion(Regions.US_WEST_2));
+        this.sqsClient = SqsClient.builder()
+                .region(Region.US_WEST_2)
+                .credentialsProvider(DefaultCredentialsProvider.create())
+                .build();
     }
 
     /**
@@ -48,15 +49,16 @@ public class OrderQueuePublisher {
      */
     public String publishStatusChange(Order order) {
         String body = buildMessageBody(order);
-        SendMessageRequest request = new SendMessageRequest()
-                .withQueueUrl(queueUrl)
-                .withMessageBody(body);
+        SendMessageRequest request = SendMessageRequest.builder()
+                .queueUrl(queueUrl)
+                .messageBody(body)
+                .build();
 
         try {
-            SendMessageResult result = sqsClient.sendMessage(request);
+            SendMessageResponse result = sqsClient.sendMessage(request);
             LOG.info("Published status change for order " + order.getOrderId()
-                    + " messageId=" + result.getMessageId());
-            return result.getMessageId();
+                    + " messageId=" + result.messageId());
+            return result.messageId();
         } catch (Exception ex) {
             // broad catch; a modern rewrite would narrow this and wrap in a
             // domain-specific exception.
