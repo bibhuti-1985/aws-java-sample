@@ -24,18 +24,18 @@ import org.joda.time.Duration;
  * what AWS Transform's continuous modernization flow can address:
  *
  * <ol>
- *   <li><b>AWS SDK v1 &rarr; v2</b> &mdash; every service wrapper
+ *   <li><b>AWS SDK v2</b> &mdash; every service wrapper
  *       ({@link OrderRepository}, {@link OrderQueuePublisher},
  *       {@link InvoiceStorageService}, {@link OrderNotificationService})
- *       uses {@code com.amazonaws.services.*} clients.</li>
+ *       uses {@code software.amazon.awssdk.services.*} clients.</li>
  *   <li><b>JDK language upgrade</b> &mdash; this file uses Joda-Time, an
  *       anonymous {@link Comparator} instead of a lambda, index-based
  *       {@code for} loops, and manual string concatenation. A modernized
  *       version would use {@code java.time}, lambdas, streams, and
  *       {@code String.join}.</li>
  *   <li><b>EOL / outdated dependencies</b> &mdash; the build pins
- *       {@code aws-java-sdk 1.9.6}, {@code joda-time 2.3}, and
- *       {@code commons-lang 2.6}, all of which a dependency scanner
+ *       {@code joda-time 2.3} and
+ *       {@code commons-lang 2.6}, both of which a dependency scanner
  *       would flag.</li>
  * </ol>
  */
